@@ -297,7 +297,10 @@ async function handleFile(e){
         generationConfig:{temperature:.1,maxOutputTokens:1024}
       })
     })
-    if(!resp.ok)throw new Error('Error '+resp.status)
+    if(!resp.ok){
+      if(resp.status===429)throw new Error('Límite de API excedido (429). Espera 1 minuto y vuelve a intentar')
+      throw new Error('Error '+resp.status)
+    }
     const d=await resp.json(),txt=d.candidates?.[0]?.content?.parts?.[0]?.text||'',m=txt.match(/\{[\s\S]*\}/)
     if(!m)throw new Error('No se pudo analizar')
     const result=JSON.parse(m[0])

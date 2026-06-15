@@ -206,9 +206,10 @@ nav .nav-plus svg{width:26px;height:26px;stroke:#fff;stroke-width:2.5;stroke-lin
   <div class="modal">
     <div class="handle"></div>
     <h3>Configuración</h3>
-    <p>Tu API key se guarda en el navegador</p>
-    <label class="s">Gemini API Key</label>
-    <input type="password" id="apiKeyInput" placeholder="Ingresa tu API key">
+    <p style="color:#22c55e;font-weight:600">✅ API key preconfigurada</p>
+    <p style="margin-top:2px">No necesitas hacer nada, la app ya funciona.</p>
+    <label class="s">Gemini API Key (solo si quieres cambiarla)</label>
+    <input type="password" id="apiKeyInput" placeholder="Dejar vacío para usar la preconfigurada">
     <div class="btn-group">
       <button class="btn-primary" onclick="saveKey()">Guardar</button>
       <button class="btn-secondary" onclick="testKey()">Probar</button>
@@ -227,7 +228,7 @@ let goalCal=parseInt(localStorage.getItem('goalCal'))||2800
 let goalProtein=parseInt(localStorage.getItem('goalProtein'))||150
 let goalFat=parseInt(localStorage.getItem('goalFat'))||84
 let goalCarbs=parseInt(localStorage.getItem('goalCarbs'))||350
-let apiKey=localStorage.getItem('geminiApiKey')||''
+let apiKey=localStorage.getItem('geminiApiKey')||atob('QVEuQWI4Uk42SnBjUnlTdlM0T3hMWG9CUWljVjFUcUh2YnlCSTFfNWZzenFPYk1xcnJJX1E=')
 
 // Init
 document.addEventListener('DOMContentLoaded',()=>{
@@ -263,8 +264,9 @@ function toggleConfig(){
 
 function saveKey(){
   const v=document.getElementById('apiKeyInput').value.trim()
-  if(!v){toast('Ingresa una API key');return}
-  apiKey=v;localStorage.setItem('geminiApiKey',v);toast('✅ API key guardada');toggleConfig()
+  if(v){apiKey=v;localStorage.setItem('geminiApiKey',v);toast('✅ API key actualizada')}
+  else {apiKey=atob('QVEuQWI4Uk42SnBjUnlTdlM0T3hMWG9CUWljVjFUcUh2YnlCSTFfNWZzenFPYk1xcnJJX1E=');localStorage.removeItem('geminiApiKey');toast('✅ Usando API key preconfigurada')}
+  toggleConfig()
 }
 
 async function testKey(){
@@ -281,7 +283,7 @@ async function testKey(){
 
 async function handleFile(e){
   const file=e.target.files[0];if(!file)return
-  if(!apiKey){toggleConfig();toast('Configura tu API key');return}
+  if(!apiKey){toast('Error: API key no configurada');return}
   document.getElementById('analyzing').classList.add('show')
   try{
     const base64=await toBase64(file)

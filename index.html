@@ -394,21 +394,9 @@
 
 <div class="config-bar">
   <div class="config-popup" id="configPopup">
-    <h3>🔑 Configurar Gemini API</h3>
+    <h3>🔑 Gemini API</h3>
+    <div style="margin-bottom:10px;font-size:13px;color:rgba(255,255,255,0.6)">La clave se guarda en tu navegador automáticamente. Solo la ingresas <strong>una vez</strong>.</div>
     <input type="password" id="apiKeyInput" placeholder="Tu clave de Gemini API">
-    <div class="hint">
-      <div style="margin-bottom:6px;font-weight:500;color:rgba(255,255,255,0.7)">⭐ Método más fácil (recomendado):</div>
-      <div style="margin-bottom:3px">1. Ve a <span style="color:#6366f1;cursor:pointer;font-weight:500" onclick="openAiStudioLink()">aistudio.google.com</span></div>
-      <div style="margin-bottom:3px">2. Inicia sesión con tu cuenta Google</div>
-      <div style="margin-bottom:3px">3. En el menú lateral izquierdo, haz clic en <strong>"Get API Key"</strong></div>
-      <div style="margin-bottom:3px">4. Haz clic en <strong>"Create API Key"</strong> → te genera la clave automáticamente</div>
-      <div style="margin-bottom:8px">5. Cópiala y pégala aquí arriba</div>
-      <div style="margin-bottom:6px;font-weight:500;color:rgba(255,255,255,0.5);font-size:11px">── O desde Google Cloud Console ──</div>
-      <div style="margin-bottom:3px;font-size:12px">1. Ve a <span style="color:#6366f1;cursor:pointer" onclick="openCloudLink()">console.cloud.google.com/apis/library</span></div>
-      <div style="margin-bottom:3px;font-size:12px">2. Busca <strong>"Generative Language API"</strong> (textual) → Habilítala</div>
-      <div style="margin-bottom:3px;font-size:12px">3. Ve a Credenciales → Crear credenciales → Clave de API</div>
-      <div style="margin-bottom:3px;font-size:12px">4. Copia la clave y pégala aquí</div>
-    </div>
     <button class="btn btn-primary btn-sm" onclick="saveApiKey()" style="width:100%">Guardar</button>
     <button class="btn btn-secondary btn-sm" onclick="testApiKey()" style="width:100%;margin-top:6px">Probar conexión</button>
   </div>
@@ -432,6 +420,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupDragDrop();
   document.getElementById('fileInput').addEventListener('change', onFileSelect);
   updateDayProgress();
+  if (apiKey) { document.getElementById('apiKeyInput').value = apiKey; }
 });
 
 // ====== CONFIG ======
@@ -439,7 +428,14 @@ function toggleConfig() {
   const popup = document.getElementById('configPopup');
   popup.classList.toggle('open');
   if (popup.classList.contains('open')) {
-    document.getElementById('apiKeyInput').value = apiKey;
+    const input = document.getElementById('apiKeyInput');
+    if (apiKey) {
+      input.value = apiKey;
+      input.placeholder = 'Clave guardada ✓';
+    } else {
+      input.value = '';
+      input.placeholder = 'Tu clave de Gemini API';
+    }
   }
 }
 

@@ -42,9 +42,12 @@ body{font-family:Inter,-apple-system,sans-serif;background:#fff;color:#1c1c1e;-w
 .cam-text{font-size:15px;font-weight:600;color:#8e8e93}
 .cam-sub{font-size:12px;color:#aeaeb2;font-weight:500}
 .cam-card input{display:none}
-/* OCR STATUS */
-.ocr-status{display:none;margin:8px 20px;text-align:center;font-size:13px;color:#aeaeb2;font-weight:500}
-.ocr-status.show{display:block}
+/* ANALYZING */
+.analyzing{display:none;margin:8px 20px;background:#f8f9fc;border-radius:14px;padding:16px;text-align:center}
+.analyzing.show{display:block}
+.spinner{width:28px;height:28px;border:3px solid #e8e8ed;border-top-color:#e9c46a;border-radius:50%;margin:0 auto 8px;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.analyzing-text{font-size:13px;color:#8e8e93;font-weight:500}
 /* MANUAL SEARCH */
 .manual-search{margin:8px 20px;display:none}
 .manual-search input{width:100%;padding:14px 16px;border:1.5px solid #e5e5ea;border-radius:14px;font-size:15px;outline:none;font-family:inherit;transition:border-color .2s;background:#f8f9fc}
@@ -205,7 +208,10 @@ nav .nav-active{color:#e9c46a}
   <input type="file" id="fileInput" accept="image/*" capture="environment">
 </label>
 
-<div class="ocr-status" id="ocrStatus">Analizando imagen...</div>
+<div class="analyzing" id="analyzing">
+  <div class="spinner"></div>
+  <div class="analyzing-text">Analizando con IA...</div>
+</div>
 
 <div class="manual-search" id="manualSection">
   <input type="text" id="manualSearch" placeholder="Buscar comida..." autocomplete="off">
@@ -258,30 +264,39 @@ nav .nav-active{color:#e9c46a}
   <div class="modal">
     <div class="handle"></div>
     <div class="step show" id="onStep1">
-      <div class="step-title">🙋 ¿Cómo te llamas?</div>
-      <div class="step-sub">Así personalizamos tu experiencia</div>
-      <input type="text" id="onName" placeholder="Tu nombre" style="width:100%;padding:14px 16px;border:1.5px solid #e5e5ea;border-radius:14px;font-size:15px;outline:none;font-family:inherit;margin-bottom:12px">
+      <div class="step-title">🔑 Análisis por foto</div>
+      <div class="step-sub">Para analizar fotos con IA necesitas una clave gratuita de Gemini</div>
+      <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="display:block;text-align:center;padding:14px;background:#e9c46a20;border-radius:14px;font-size:14px;font-weight:600;color:#8a7530;text-decoration:none;margin-bottom:12px">🔗 Obtener clave gratis (30 segundos)</a>
+      <label class="s">Pega aquí tu clave</label>
+      <input type="text" id="onApiKey" placeholder="AIzaSy..." style="width:100%;padding:14px 16px;border:1.5px solid #e5e5ea;border-radius:14px;font-size:15px;outline:none;font-family:inherit;margin-bottom:6px">
+      <p style="font-size:12px;color:#aeaeb2;margin:0 0 12px">Si no pones clave, solo podrás buscar manualmente</p>
       <div class="btn-group"><button class="btn-primary" onclick="onNext(1)">Continuar</button></div>
     </div>
     <div class="step" id="onStep2">
+      <div class="step-title">🙋 ¿Cómo te llamas?</div>
+      <div class="step-sub">Así personalizamos tu experiencia</div>
+      <input type="text" id="onName" placeholder="Tu nombre" style="width:100%;padding:14px 16px;border:1.5px solid #e5e5ea;border-radius:14px;font-size:15px;outline:none;font-family:inherit;margin-bottom:12px">
+      <div class="btn-group"><button class="btn-primary" onclick="onNext(2)">Continuar</button></div>
+    </div>
+    <div class="step" id="onStep3">
       <div class="step-title">⚖️ Tu peso y altura</div>
       <div class="step-sub">Para calcular tus necesidades</div>
       <label class="s">Peso (kg)</label>
       <input type="number" id="onWeight" placeholder="70" style="width:100%;padding:14px 16px;border:1.5px solid #e5e5ea;border-radius:14px;font-size:15px;outline:none;font-family:inherit;margin-bottom:12px">
       <label class="s">Altura (cm)</label>
       <input type="number" id="onHeight" placeholder="175" style="width:100%;padding:14px 16px;border:1.5px solid #e5e5ea;border-radius:14px;font-size:15px;outline:none;font-family:inherit;margin-bottom:12px">
-      <div class="btn-group"><button class="btn-primary" onclick="onNext(2)">Continuar</button></div>
+      <div class="btn-group"><button class="btn-primary" onclick="onNext(3)">Continuar</button></div>
     </div>
-    <div class="step" id="onStep3">
+    <div class="step" id="onStep4">
       <div class="step-title">🎂 Tu edad y género</div>
       <div class="step-sub">Influye en tu metabolismo</div>
       <label class="s">Edad (años)</label>
       <input type="number" id="onAge" placeholder="30" style="width:100%;padding:14px 16px;border:1.5px solid #e5e5ea;border-radius:14px;font-size:15px;outline:none;font-family:inherit;margin-bottom:12px">
       <label class="s">Género</label>
       <select id="onGender"><option value="male">Hombre</option><option value="female">Mujer</option></select>
-      <div class="btn-group"><button class="btn-primary" onclick="onNext(3)">Continuar</button></div>
+      <div class="btn-group"><button class="btn-primary" onclick="onNext(4)">Continuar</button></div>
     </div>
-    <div class="step" id="onStep4">
+    <div class="step" id="onStep5">
       <div class="step-title">🏃 Actividad física</div>
       <div class="step-sub">¿Cuánto te mueves al día?</div>
       <select id="onActivity">
@@ -291,9 +306,9 @@ nav .nav-active{color:#e9c46a}
         <option value="1.725">Activo (6-7 días/semana)</option>
         <option value="1.9">Muy activo (deporte diario intenso)</option>
       </select>
-      <div class="btn-group"><button class="btn-primary" onclick="onNext(4)">Continuar</button></div>
+      <div class="btn-group"><button class="btn-primary" onclick="onNext(5)">Continuar</button></div>
     </div>
-    <div class="step" id="onStep5">
+    <div class="step" id="onStep6">
       <div class="step-title">🎯 Tu objetivo</div>
       <div class="step-sub">¿Qué quieres conseguir?</div>
       <select id="onGoal">
@@ -301,9 +316,9 @@ nav .nav-active{color:#e9c46a}
         <option value="maintain" selected>Mantener peso</option>
         <option value="gain">Ganar masa muscular (superávit)</option>
       </select>
-      <div class="btn-group"><button class="btn-primary" onclick="onNext(5)">Calcular</button></div>
+      <div class="btn-group"><button class="btn-primary" onclick="onNext(6)">Calcular</button></div>
     </div>
-    <div class="step" id="onStep6">
+    <div class="step" id="onStep7">
       <div class="step-title">✅ Tus objetivos diarios</div>
       <div class="step-sub">Basados en tus datos</div>
       <div id="onSummary"></div>
@@ -312,110 +327,14 @@ nav .nav-active{color:#e9c46a}
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <script>
+const MODEL='gemini-2.0-flash'
 const STORAGE='nutritracker_data'
 const ONBOARD_KEY='nutritracker_onboarded'
 let pendingFile=null
 
-const FOOD_DB=[
-  {n:'Pollo a la plancha',c:165,p:31,f:3.6,car:0},
-  {n:'Arroz blanco cocido',c:130,p:2.7,f:0.3,car:28},
-  {n:'Ensalada verde',c:15,p:1.2,f:0.2,car:2.9},
-  {n:'Huevo cocido',c:78,p:6.3,f:5.3,car:0.6},
-  {n:'Huevo frito',c:90,p:6.3,f:7,car:0.6},
-  {n:'Tortilla de patatas',c:185,p:8,f:12,car:13},
-  {n:'Pan blanco (rebanada)',c:75,p:2.5,f:0.8,car:14},
-  {n:'Pan integral (rebanada)',c:65,p:2.7,f:0.6,car:12},
-  {n:'Leche entera (vaso 200ml)',c:124,p:6.6,f:7,car:9.4},
-  {n:'Yogur natural',c:60,p:5,f:3.2,car:4.7},
-  {n:'Queso curado (30g)',c:120,p:7.5,f:9.8,car:0.4},
-  {n:'Plátano',c:105,p:1.3,f:0.4,car:27},
-  {n:'Manzana',c:52,p:0.3,f:0.2,car:14},
-  {n:'Naranja',c:47,p:0.9,f:0.1,car:12},
-  {n:'Uvas (100g)',c:69,p:0.7,f:0.2,car:18},
-  {n:'Fresas (100g)',c:32,p:0.7,f:0.3,car:7.7},
-  {n:'Aguacate (medio)',c:160,p:2,f:14.7,car:8.5},
-  {n:'Tomate',c:18,p:0.9,f:0.2,car:3.9},
-  {n:'Patata cocida',c:87,p:2,f:0.1,car:20},
-  {n:'Patatas fritas (ración)',c:312,p:4,f:15,car:41},
-  {n:'Lentejas cocidas',c:116,p:9,f:0.4,car:20},
-  {n:'Garbanzos cocidos',c:139,p:8.9,f:2.6,car:22},
-  {n:'Judías verdes',c:31,p:1.8,f:0.1,car:7},
-  {n:'Brócoli',c:34,p:2.8,f:0.4,car:7},
-  {n:'Zanahoria',c:41,p:0.9,f:0.2,car:10},
-  {n:'Pasta cocida (100g)',c:131,p:5,f:1.1,car:25},
-  {n:'Pizza margarita (1 porción)',c:285,p:12,f:12,car:36},
-  {n:'Hamburguesa carne',c:295,p:20,f:17,car:20},
-  {n:'Perrito caliente',c:290,p:12,f:18,car:23},
-  {n:'Pescado blanco plancha',c:105,p:22,f:1.5,car:0},
-  {n:'Salmón a la plancha',c:208,p:22,f:13,car:0},
-  {n:'Atún en lata (escurrido)',c:115,p:26,f:1,car:0},
-  {n:'Gambas cocidas (100g)',c:99,p:24,f:0.3,car:0.2},
-  {n:'Chocolate negro (30g)',c:170,p:2,f:12,car:15},
-  {n:'Galletas María (4ud)',c:140,p:2,f:4,car:24},
-  {n:'Croissant',c:231,p:5,f:13,car:26},
-  {n:'Magdalena',c:180,p:3,f:9,car:22},
-  {n:'Helado vainilla (bola)',c:137,p:2,f:7,car:16},
-  {n:'Coca-Cola (lata)',c:140,p:0,f:0,car:35},
-  {n:'Zumo de naranja (vaso)',c:110,p:1.5,f:0.2,car:26},
-  {n:'Café solo',c:2,p:0.3,f:0,car:0},
-  {n:'Café con leche',c:65,p:3.5,f:3.5,car:5},
-  {n:'Cerveza (caña)',c:90,p:0.7,f:0,car:8},
-  {n:'Vino tinto (copa)',c:85,p:0.1,f:0,car:2.6},
-  {n:'Agua (vaso)',c:0,p:0,f:0,car:0},
-  {n:'Paella mixta (ración)',c:450,p:20,f:12,car:60},
-  {n:'Cocido madrileño',c:380,p:22,f:15,car:40},
-  {n:'Fabada asturiana',c:420,p:24,f:20,car:35},
-  {n:'Gazpacho (vaso)',c:50,p:1,f:3,car:5},
-  {n:'Tortilla francesa (2 huevos)',c:160,p:14,f:11,car:1},
-  {n:'Merluza rebozada',c:200,p:18,f:10,car:10},
-  {n:'Caldo de verduras',c:12,p:0.5,f:0.2,car:2},
-  {n:'Sándwich mixto',c:285,p:15,f:13,car:28},
-  {n:'Bocadillo jamón serrano',c:320,p:18,f:12,car:35},
-  {n:'Ensaladilla rusa',c:180,p:5,f:12,car:14},
-  {n:'Pisto (100g)',c:55,p:1.5,f:3.5,car:5},
-  {n:'Lubina al horno',c:120,p:22,f:3.5,car:0},
-  {n:'Mejillones al vapor (100g)',c:86,p:12,f:2.2,car:3.7},
-  {n:'Pierna de cordero (ración)',c:280,p:25,f:19,car:0},
-  {n:'Churros (6ud)',c:310,p:5,f:16,car:36},
-  {n:'Natillas (100g)',c:120,p:3.5,f:4.5,car:17},
-  {n:'Flan de huevo',c:145,p:5,f:5,car:20},
-  {n:'Arroz con leche',c:150,p:4,f:4,car:25},
-  {n:'Crema de calabaza',c:60,p:1.5,f:3,car:7},
-  {n:'Sushi (6 piezas)',c:220,p:10,f:3,car:40},
-  {n:'Taco de carne',c:195,p:12,f:9,car:18},
-  {n:'Burrito',c:350,p:15,f:14,car:38},
-  {n:'Lasagna (porción)',c:350,p:18,f:14,car:36},
-  {n:'Croquetas de jamón (6ud)',c:280,p:12,f:16,car:22},
-  {n:'Pimientos de padrón',c:40,p:1.5,f:3,car:3},
-  {n:'Berenjena rebozada',c:150,p:3,f:9,car:16},
-  {n:'Espárragos trigueros',c:20,p:2.2,f:0.1,car:3.9},
-  {n:'Alcachofa (1ud)',c:25,p:1.5,f:0.1,car:5},
-  {n:'Setas salteadas (100g)',c:35,p:2.7,f:1.5,car:4},
-  {n:'Pechuga pavo plancha',c:135,p:29,f:1.5,car:0},
-  {n:'Lomo embuchado (50g)',c:185,p:13,f:14.5,car:1},
-  {n:'Jamón ibérico (50g)',c:150,p:21,f:7,car:0.5},
-  {n:'Salchichas cerdo (2ud)',c:250,p:12,f:22,car:3},
-  {n:'Bacon frito (2 lonchas)',c:88,p:5.5,f:7,car:0.2},
-  {n:'Mermelada (cucharada)',c:50,p:0.1,f:0,car:13},
-  {n:'Miel (cucharada)',c:64,p:0.1,f:0,car:17},
-  {n:'Aceite de oliva (cucharada)',c:120,p:0,f:13.5,car:0},
-  {n:'Mantequilla (10g)',c:72,p:0.1,f:8.1,car:0.1},
-  {n:'Mayonesa (cucharada)',c:90,p:0.2,f:10,car:0.3},
-  {n:'Ketchup (cucharada)',c:15,p:0.1,f:0,car:4},
-  {n:'Frutos secos mix (30g)',c:175,p:5,f:15,car:6},
-  {n:'Almendras (30g)',c:170,p:6,f:15,car:6},
-  {n:'Nueces (30g)',c:185,p:4.5,f:18,car:3.5},
-  {n:'Cacahuetes (30g)',c:170,p:7.5,f:14,car:5},
-  {n:'Hummus (50g)',c:83,p:3.5,f:5,car:6.5},
-  {n:'Smoothie frutas',c:140,p:2,f:0.5,car:33},
-  {n:'Batido proteínas',c:180,p:30,f:2,car:10},
-  {n:'Barrita cereal',c:120,p:3,f:4,car:20},
-  {n:'Gelatina (postre)',c:40,p:2,f:0,car:9},
-  {n:'Tortitas con sirope (2ud)',c:280,p:6,f:7,car:48},
-  {n:'Muesli (50g)',c:185,p:5,f:4,car:33},
-  {n:'Avena cocida (50g)',c:195,p:6.5,f:3.5,car:33}
+const FOOD_DB=[/* ... data ... */
+  {n:'Pollo a la plancha',c:165,p:31,f:3.6,car:0},{n:'Arroz blanco cocido',c:130,p:2.7,f:0.3,car:28},{n:'Ensalada verde',c:15,p:1.2,f:0.2,car:2.9},{n:'Huevo cocido',c:78,p:6.3,f:5.3,car:0.6},{n:'Huevo frito',c:90,p:6.3,f:7,car:0.6},{n:'Tortilla de patatas',c:185,p:8,f:12,car:13},{n:'Pan blanco (rebanada)',c:75,p:2.5,f:0.8,car:14},{n:'Pan integral (rebanada)',c:65,p:2.7,f:0.6,car:12},{n:'Leche entera (vaso 200ml)',c:124,p:6.6,f:7,car:9.4},{n:'Yogur natural',c:60,p:5,f:3.2,car:4.7},{n:'Queso curado (30g)',c:120,p:7.5,f:9.8,car:0.4},{n:'Plátano',c:105,p:1.3,f:0.4,car:27},{n:'Manzana',c:52,p:0.3,f:0.2,car:14},{n:'Naranja',c:47,p:0.9,f:0.1,car:12},{n:'Uvas (100g)',c:69,p:0.7,f:0.2,car:18},{n:'Fresas (100g)',c:32,p:0.7,f:0.3,car:7.7},{n:'Aguacate (medio)',c:160,p:2,f:14.7,car:8.5},{n:'Tomate',c:18,p:0.9,f:0.2,car:3.9},{n:'Patata cocida',c:87,p:2,f:0.1,car:20},{n:'Patatas fritas (ración)',c:312,p:4,f:15,car:41},{n:'Lentejas cocidas',c:116,p:9,f:0.4,car:20},{n:'Garbanzos cocidos',c:139,p:8.9,f:2.6,car:22},{n:'Judías verdes',c:31,p:1.8,f:0.1,car:7},{n:'Brócoli',c:34,p:2.8,f:0.4,car:7},{n:'Zanahoria',c:41,p:0.9,f:0.2,car:10},{n:'Pasta cocida (100g)',c:131,p:5,f:1.1,car:25},{n:'Pizza margarita (1 porción)',c:285,p:12,f:12,car:36},{n:'Hamburguesa carne',c:295,p:20,f:17,car:20},{n:'Perrito caliente',c:290,p:12,f:18,car:23},{n:'Pescado blanco plancha',c:105,p:22,f:1.5,car:0},{n:'Salmón a la plancha',c:208,p:22,f:13,car:0},{n:'Atún en lata (escurrido)',c:115,p:26,f:1,car:0},{n:'Gambas cocidas (100g)',c:99,p:24,f:0.3,car:0.2},{n:'Chocolate negro (30g)',c:170,p:2,f:12,car:15},{n:'Galletas María (4ud)',c:140,p:2,f:4,car:24},{n:'Croissant',c:231,p:5,f:13,car:26},{n:'Magdalena',c:180,p:3,f:9,car:22},{n:'Helado vainilla (bola)',c:137,p:2,f:7,car:16},{n:'Coca-Cola (lata)',c:140,p:0,f:0,car:35},{n:'Zumo de naranja (vaso)',c:110,p:1.5,f:0.2,car:26},{n:'Café solo',c:2,p:0.3,f:0,car:0},{n:'Café con leche',c:65,p:3.5,f:3.5,car:5},{n:'Cerveza (caña)',c:90,p:0.7,f:0,car:8},{n:'Vino tinto (copa)',c:85,p:0.1,f:0,car:2.6},{n:'Agua (vaso)',c:0,p:0,f:0,car:0},{n:'Paella mixta (ración)',c:450,p:20,f:12,car:60},{n:'Cocido madrileño',c:380,p:22,f:15,car:40},{n:'Fabada asturiana',c:420,p:24,f:20,car:35},{n:'Gazpacho (vaso)',c:50,p:1,f:3,car:5},{n:'Tortilla francesa (2 huevos)',c:160,p:14,f:11,car:1},{n:'Merluza rebozada',c:200,p:18,f:10,car:10},{n:'Caldo de verduras',c:12,p:0.5,f:0.2,car:2},{n:'Sándwich mixto',c:285,p:15,f:13,car:28},{n:'Bocadillo jamón serrano',c:320,p:18,f:12,car:35},{n:'Ensaladilla rusa',c:180,p:5,f:12,car:14},{n:'Pisto (100g)',c:55,p:1.5,f:3.5,car:5},{n:'Lubina al horno',c:120,p:22,f:3.5,car:0},{n:'Mejillones al vapor (100g)',c:86,p:12,f:2.2,car:3.7},{n:'Pierna de cordero (ración)',c:280,p:25,f:19,car:0},{n:'Churros (6ud)',c:310,p:5,f:16,car:36},{n:'Natillas (100g)',c:120,p:3.5,f:4.5,car:17},{n:'Flan de huevo',c:145,p:5,f:5,car:20},{n:'Arroz con leche',c:150,p:4,f:4,car:25},{n:'Crema de calabaza',c:60,p:1.5,f:3,car:7},{n:'Sushi (6 piezas)',c:220,p:10,f:3,car:40},{n:'Taco de carne',c:195,p:12,f:9,car:18},{n:'Burrito',c:350,p:15,f:14,car:38},{n:'Lasagna (porción)',c:350,p:18,f:14,car:36},{n:'Croquetas de jamón (6ud)',c:280,p:12,f:16,car:22},{n:'Pimientos de padrón',c:40,p:1.5,f:3,car:3},{n:'Berenjena rebozada',c:150,p:3,f:9,car:16},{n:'Espárragos trigueros',c:20,p:2.2,f:0.1,car:3.9},{n:'Alcachofa (1ud)',c:25,p:1.5,f:0.1,car:5},{n:'Setas salteadas (100g)',c:35,p:2.7,f:1.5,car:4},{n:'Pechuga pavo plancha',c:135,p:29,f:1.5,car:0},{n:'Lomo embuchado (50g)',c:185,p:13,f:14.5,car:1},{n:'Jamón ibérico (50g)',c:150,p:21,f:7,car:0.5},{n:'Salchichas cerdo (2ud)',c:250,p:12,f:22,car:3},{n:'Bacon frito (2 lonchas)',c:88,p:5.5,f:7,car:0.2},{n:'Mermelada (cucharada)',c:50,p:0.1,f:0,car:13},{n:'Miel (cucharada)',c:64,p:0.1,f:0,car:17},{n:'Aceite de oliva (cucharada)',c:120,p:0,f:13.5,car:0},{n:'Mantequilla (10g)',c:72,p:0.1,f:8.1,car:0.1},{n:'Mayonesa (cucharada)',c:90,p:0.2,f:10,car:0.3},{n:'Ketchup (cucharada)',c:15,p:0.1,f:0,car:4},{n:'Frutos secos mix (30g)',c:175,p:5,f:15,car:6},{n:'Almendras (30g)',c:170,p:6,f:15,car:6},{n:'Nueces (30g)',c:185,p:4.5,f:18,car:3.5},{n:'Cacahuetes (30g)',c:170,p:7.5,f:14,car:5},{n:'Hummus (50g)',c:83,p:3.5,f:5,car:6.5},{n:'Smoothie frutas',c:140,p:2,f:0.5,car:33},{n:'Batido proteínas',c:180,p:30,f:2,car:10},{n:'Barrita cereal',c:120,p:3,f:4,car:20},{n:'Gelatina (postre)',c:40,p:2,f:0,car:9},{n:'Tortitas con sirope (2ud)',c:280,p:6,f:7,car:48},{n:'Muesli (50g)',c:185,p:5,f:4,car:33},{n:'Avena cocida (50g)',c:195,p:6.5,f:3.5,car:33}
 ]
 
 let entries=JSON.parse(localStorage.getItem(STORAGE)||'[]')
@@ -423,6 +342,7 @@ let goalCal=parseInt(localStorage.getItem('goalCal'))||2800
 let goalProtein=parseInt(localStorage.getItem('goalProtein'))||150
 let goalFat=parseInt(localStorage.getItem('goalFat'))||84
 let goalCarbs=parseInt(localStorage.getItem('goalCarbs'))||350
+let apiKey=localStorage.getItem('geminiApiKey')||''
 
 document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('dateDisplay').textContent=new Date().toLocaleDateString('es',{month:'short',day:'numeric'})
@@ -482,111 +402,108 @@ function renderStats(){
   }
   const maxCal=Math.max(...days.map(d=>d.cal),1)
   const avg=days.reduce((s,d)=>s+d.cal,0)/7
-
   if(!days.some(d=>d.cal>0)){
-    el.innerHTML='<div class="stats-empty"><div class="icon">📊</div><div class="t">Aún no hay datos</div><div class="s">Registra comidas para ver tu progreso</div></div>'
+    el.innerHTML='<div class="stats-empty"><div class="icon">📊</div><div class="t">Aún no hay datos</div></div>'
     return
   }
-
   el.innerHTML=`<div class="stats-chart">${days.map(d=>{
     const h=Math.max(4,(d.cal/maxCal)*160)
-    const color=d.cal>0?'#e9c46a':'#f1f3f6'
-    return `<div class="stats-bar-wrap"><div class="stats-bar-cals">${d.cal>0?d.cal.toFixed(0):''}</div><div class="stats-bar" style="height:${h}px;background:${color}"></div><div class="stats-bar-label">${d.label} ${d.date}</div></div>`
+    return `<div class="stats-bar-wrap"><div class="stats-bar-cals">${d.cal>0?d.cal.toFixed(0):''}</div><div class="stats-bar" style="height:${h}px;background:${d.cal>0?'#e9c46a':'#f1f3f6'}"></div><div class="stats-bar-label">${d.label} ${d.date}</div></div>`
   }).join('')}</div><div class="stats-avg">Media 7 días: <strong>${avg.toFixed(0)} kcal</strong></div>`
 }
 
 // ONBOARDING
 let onData={}
 function onNext(step){
-  if(step===1&&!document.getElementById('onName').value.trim()){toast('Escribe tu nombre');return}
-  if(step===2){const w=parseFloat(document.getElementById('onWeight').value),h=parseFloat(document.getElementById('onHeight').value);if(!w||!h){toast('Completa peso y altura');return};onData.weight=w;onData.height=h}
-  if(step===3){const a=parseInt(document.getElementById('onAge').value);if(!a||a<10||a>120){toast('Edad válida (10-120)');return};onData.age=a;onData.gender=document.getElementById('onGender').value}
-  if(step===4){onData.activity=parseFloat(document.getElementById('onActivity').value)}
-  if(step===5){onData.goal=document.getElementById('onGoal').value;calculateGoals()}
-  if(step<6){
+  if(step===1){
+    const k=document.getElementById('onApiKey').value.trim()
+    if(k){apiKey=k;localStorage.setItem('geminiApiKey',k)}
+  }
+  if(step===2&&!document.getElementById('onName').value.trim()){toast('Escribe tu nombre');return}
+  if(step===3){const w=parseFloat(document.getElementById('onWeight').value),h=parseFloat(document.getElementById('onHeight').value);if(!w||!h){toast('Completa peso y altura');return};onData.weight=w;onData.height=h}
+  if(step===4){const a=parseInt(document.getElementById('onAge').value);if(!a||a<10||a>120){toast('Edad válida (10-120)');return};onData.age=a;onData.gender=document.getElementById('onGender').value}
+  if(step===5){onData.activity=parseFloat(document.getElementById('onActivity').value)}
+  if(step===6){
+    onData.goal=document.getElementById('onGoal').value
+    const w=onData.weight,h=onData.height,a=onData.age,g=onData.gender,act=onData.activity
+    let bmr=g==='male'?10*w+6.25*h-5*a+5:10*w+6.25*h-5*a-161
+    let tdee=bmr*act
+    if(onData.goal==='lose')tdee-=300;else if(onData.goal==='gain')tdee+=300
+    const protein=Math.round(w*1.8),fat=Math.round(tdee*0.25/9),carbs=Math.round((tdee-protein*4-fat*9)/4)
+    onData.calories=Math.round(tdee);onData.protein=protein;onData.fat=fat;onData.carbs=carbs
+    const goalMap={lose:'Perder peso',maintain:'Mantener peso',gain:'Ganar masa muscular'}
+    document.getElementById('onSummary').innerHTML=`
+      <div class="summary-title">${onData.name||'Usuario'}</div>
+      <div class="summary-sub">${onData.weight}kg · ${onData.height}cm · ${onData.age}años · ${goalMap[onData.goal]}</div>
+      <div class="result-item"><span class="result-label">Calorías</span><span class="result-val">${Math.round(tdee)} kcal</span></div>
+      <div class="result-item"><span class="result-label">Proteína</span><span class="result-val">${protein} g</span></div>
+      <div class="result-item"><span class="result-label">Grasa</span><span class="result-val">${fat} g</span></div>
+      <div class="result-item"><span class="result-label">Carbohidratos</span><span class="result-val">${carbs} g</span></div>
+    `
+  }
+  if(step<7){
     document.getElementById('onStep'+step).classList.remove('show')
     document.getElementById('onStep'+(step+1)).classList.add('show')
   }
 }
 
-function calculateGoals(){
-  const w=onData.weight,h=onData.height,a=onData.age,g=onData.gender,act=onData.activity
-  let bmr=g==='male'?10*w+6.25*h-5*a+5:10*w+6.25*h-5*a-161
-  let tdee=bmr*act
-  if(onData.goal==='lose')tdee-=300
-  else if(onData.goal==='gain')tdee+=300
-
-  const protein=Math.round(w*1.8)
-  const fat=Math.round(tdee*0.25/9)
-  const carbs=Math.round((tdee-protein*4-fat*9)/4)
-
-  onData.calories=Math.round(tdee)
-  onData.protein=protein
-  onData.fat=fat
-  onData.carbs=carbs
-
-  const goalMap={lose:'Perder peso',maintain:'Mantener peso',gain:'Ganar masa muscular'}
-  const actMap={1.2:'Sedentario',1.375:'Ligero',1.55:'Moderado',1.725:'Activo',1.9:'Muy activo'}
-
-  document.getElementById('onSummary').innerHTML=`
-    <div class="summary-title">${onData.name||'Usuario'}</div>
-    <div class="summary-sub">${onData.weight}kg · ${onData.height}cm · ${onData.age}años · ${goalMap[onData.goal]}</div>
-    <div class="result-item"><span class="result-label">Calorías</span><span class="result-val">${Math.round(tdee)} kcal</span></div>
-    <div class="result-item"><span class="result-label">Proteína</span><span class="result-val">${protein} g</span></div>
-    <div class="result-item"><span class="result-label">Grasa</span><span class="result-val">${fat} g</span></div>
-    <div class="result-item"><span class="result-label">Carbohidratos</span><span class="result-val">${carbs} g</span></div>
-  `
-}
-
 function finishOnboarding(){
   goalCal=onData.calories;goalProtein=onData.protein;goalFat=onData.fat;goalCarbs=onData.carbs
-  document.getElementById('goalCal').value=goalCal
-  document.getElementById('goalProtein').value=goalProtein
-  document.getElementById('goalFat').value=goalFat
-  document.getElementById('goalCarbs').value=goalCarbs
-  localStorage.setItem('goalCal',goalCal)
-  localStorage.setItem('goalProtein',goalProtein)
-  localStorage.setItem('goalFat',goalFat)
-  localStorage.setItem('goalCarbs',goalCarbs)
+  document.getElementById('goalCal').value=goalCal;document.getElementById('goalProtein').value=goalProtein
+  document.getElementById('goalFat').value=goalFat;document.getElementById('goalCarbs').value=goalCarbs
+  localStorage.setItem('goalCal',goalCal);localStorage.setItem('goalProtein',goalProtein)
+  localStorage.setItem('goalFat',goalFat);localStorage.setItem('goalCarbs',goalCarbs)
   localStorage.setItem(ONBOARD_KEY,'1')
   document.getElementById('onboardingModal').classList.remove('show')
   updateRings()
-  toast('✅ Objetivos calculados para ti')
+  toast('✅ Configuración lista')
 }
 
 async function handleFile(e){
   const file=e.target.files[0];if(!file)return
   pendingFile=file
-  document.getElementById('ocrStatus').textContent='Analizando imagen...'
-  document.getElementById('ocrStatus').classList.add('show')
-  try{
-    const {data:{text}}=await Tesseract.recognize(file,'spa')
-    document.getElementById('ocrStatus').classList.remove('show')
-    const words=text.toLowerCase().replace(/[^a-záéíóúñü\s]/g,'').trim().split(/\s+/).filter(w=>w.length>2)
-    const matches=FOOD_DB.map(f=>{
-      const score=words.reduce((s,w)=>s+(f.n.toLowerCase().includes(w)?1:0),0)
-      return{...f,score}
-    }).filter(f=>f.score>0).sort((a,b)=>b.score-a.score).slice(0,6)
-    if(matches.length){
-      document.getElementById('manualSearch').value=matches[0].n
-      searchFoodDB()
-      if(document.getElementById('manualResults').querySelectorAll('.manual-item').length===1){
-        addEntry({name:matches[0].n,calories:matches[0].c,protein:matches[0].p,fat:matches[0].f,carbs:matches[0].car})
-        e.target.value=''
-        return
-      }
-    }
+  if(!apiKey){
     document.getElementById('manualSection').style.display='block'
     document.getElementById('manualSearch').focus()
-    if(matches.length)document.getElementById('manualSearch').value=''
-    searchFoodDB()
-  }catch(err){
-    document.getElementById('ocrStatus').classList.remove('show')
+    toast('Sin clave de análisis. Busca manualmente')
+    e.target.value=''
+    return
+  }
+  document.getElementById('analyzing').classList.add('show')
+  try{
+    const base64=await toBase64(file)
+    const resp=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${apiKey}`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        contents:[{role:'user',parts:[
+          {text:'Eres nutricionista. Responde SOLO JSON:\n{"name":"Nombre del plato en español","calories":0,"protein":0,"fat":0,"carbs":0}'},
+          {inlineData:{mimeType:file.type,data:base64}}
+        ]}],
+        generationConfig:{temperature:.1,maxOutputTokens:1024}
+      })
+    })
+    if(resp.status===429){
+      document.getElementById('analyzing').classList.remove('show')
+      toast('⏳ Demasiadas peticiones. Busca manualmente')
+      document.getElementById('manualSection').style.display='block'
+      document.getElementById('manualSearch').focus()
+      e.target.value=''
+      return
+    }
+    if(!resp.ok)throw new Error('Error '+resp.status)
+    const d=await resp.json(),txt=d.candidates?.[0]?.content?.parts?.[0]?.text||'',m=txt.match(/\{[\s\S]*\}/)
+    if(!m)throw new Error('No se pudo analizar')
+    addEntry(JSON.parse(m[0]))
+  }catch(e){
+    document.getElementById('analyzing').classList.remove('show')
+    toast('❌ Error al analizar. Busca manualmente')
     document.getElementById('manualSection').style.display='block'
     document.getElementById('manualSearch').focus()
   }
   e.target.value=''
 }
+
+function toBase64(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(f)})}
 
 function addEntry(result){
   const entry={...result,date:new Date().toISOString(),id:Date.now(),thumbnail:pendingFile?URL.createObjectURL(pendingFile):''}
@@ -595,6 +512,7 @@ function addEntry(result){
   localStorage.setItem(STORAGE,JSON.stringify(entries))
   updateRings();renderMeals()
   toast('✅ '+(result.name||'Añadido'))
+  document.getElementById('analyzing').classList.remove('show')
   document.getElementById('manualSection').style.display='none'
   document.getElementById('manualSearch').value=''
   document.getElementById('manualResults').innerHTML=''
@@ -607,10 +525,7 @@ function searchFoodDB(){
   if(!q){el.innerHTML='';el.style.display='none';return}
   const matches=FOOD_DB.filter(f=>f.n.toLowerCase().includes(q)).slice(0,8)
   if(!matches.length){el.innerHTML='<div class="manual-item" style="color:#aeaeb2;cursor:default">Sin resultados</div>';el.style.display='block';return}
-  el.innerHTML=matches.map(f=>`<div class="manual-item" data-name="${f.n}" data-cal="${f.c}" data-protein="${f.p}" data-fat="${f.f}" data-carbs="${f.car}">
-    <div class="manual-name">${f.n}</div>
-    <div class="manual-cals">${f.c} kcal · P ${f.p}g · G ${f.f}g · C ${f.car}g</div>
-  </div>`).join('')
+  el.innerHTML=matches.map(f=>`<div class="manual-item" data-name="${f.n}" data-cal="${f.c}" data-protein="${f.p}" data-fat="${f.f}" data-carbs="${f.car}"><div class="manual-name">${f.n}</div><div class="manual-cals">${f.c} kcal · P ${f.p}g · G ${f.f}g · C ${f.car}g</div></div>`).join('')
   el.style.display='block'
 }
 
@@ -624,58 +539,30 @@ function updateRings(){
   const todayEntries=entries.filter(e=>new Date(e.date).toDateString()===today)
   const t={cal:0,protein:0,fat:0,carbs:0}
   todayEntries.forEach(e=>{t.cal+=e.calories||0;t.protein+=e.protein||0;t.fat+=e.fat||0;t.carbs+=e.carbs||0})
-
   const pct=Math.min(100,(t.cal/goalCal)*100)
   document.getElementById('calRing').style.strokeDashoffset=578-(pct/100)*578
   document.getElementById('calNum').textContent=t.cal.toFixed(0)
   document.getElementById('calGoal').textContent='/ '+goalCal+' kcal'
-
-  const proPct=Math.min(100,(t.protein/goalProtein)*100)
-  document.getElementById('proteinRing').style.strokeDashoffset=207-(proPct/100)*207
+  document.getElementById('proteinRing').style.strokeDashoffset=207-(Math.min(100,(t.protein/goalProtein)*100)/100)*207
   document.getElementById('proteinNum').textContent=t.protein.toFixed(1)
-
-  const fatPct=Math.min(100,(t.fat/goalFat)*100)
-  document.getElementById('fatRing').style.strokeDashoffset=207-(fatPct/100)*207
+  document.getElementById('fatRing').style.strokeDashoffset=207-(Math.min(100,(t.fat/goalFat)*100)/100)*207
   document.getElementById('fatNum').textContent=t.fat.toFixed(1)
-
-  const carbsPct=Math.min(100,(t.carbs/goalCarbs)*100)
-  document.getElementById('carbsRing').style.strokeDashoffset=207-(carbsPct/100)*207
+  document.getElementById('carbsRing').style.strokeDashoffset=207-(Math.min(100,(t.carbs/goalCarbs)*100)/100)*207
   document.getElementById('carbsNum').textContent=t.carbs.toFixed(1)
 }
 
 function renderMeals(){
-  const today=new Date().toDateString()
-  const todayEntries=entries.filter(e=>new Date(e.date).toDateString()===today)
-  const el=document.getElementById('mealsList')
-
-  if(!todayEntries.length){
-    el.innerHTML='<div class="empty-state" id="emptyState"><div class="icon">🍽️</div><div class="t">Sin comidas hoy</div><div class="s">Haz una foto a tu comida</div></div>'
-    return
-  }
-
+  const today=new Date().toDateString(),todayEntries=entries.filter(e=>new Date(e.date).toDateString()===today),el=document.getElementById('mealsList')
+  if(!todayEntries.length){el.innerHTML='<div class="empty-state"><div class="icon">🍽️</div><div class="t">Sin comidas hoy</div><div class="s">Haz una foto a tu comida</div></div>';return}
   el.innerHTML=''
   todayEntries.forEach(e=>{
     const div=document.createElement('div');div.className='meal'
-    div.innerHTML=`
-      ${e.thumbnail?`<img class="meal-img" src="${e.thumbnail}" alt="">`:'<div class="meal-img">🍽️</div>'}
-      <div class="meal-info">
-        <div class="meal-name">${e.name||'Comida'}</div>
-        <div class="meal-cals">${(e.calories||0).toFixed(0)} kcal</div>
-        <div class="meal-macros">
-          <span class="meal-macro"><span class="dot" style="background:#f26b7a"></span><span class="val">${(e.protein||0).toFixed(1)}</span></span>
-          <span class="meal-macro"><span class="dot" style="background:#4fc3f7"></span><span class="val">${(e.fat||0).toFixed(1)}</span></span>
-          <span class="meal-macro"><span class="dot" style="background:#66d17a"></span><span class="val">${(e.carbs||0).toFixed(1)}</span></span>
-        </div>
-      </div>
-    `
+    div.innerHTML=`${e.thumbnail?`<img class="meal-img" src="${e.thumbnail}" alt="">`:'<div class="meal-img">🍽️</div>'}<div class="meal-info"><div class="meal-name">${e.name||'Comida'}</div><div class="meal-cals">${(e.calories||0).toFixed(0)} kcal</div><div class="meal-macros"><span class="meal-macro"><span class="dot" style="background:#f26b7a"></span><span class="val">${(e.protein||0).toFixed(1)}</span></span><span class="meal-macro"><span class="dot" style="background:#4fc3f7"></span><span class="val">${(e.fat||0).toFixed(1)}</span></span><span class="meal-macro"><span class="dot" style="background:#66d17a"></span><span class="val">${(e.carbs||0).toFixed(1)}</span></span></div></div>`
     el.appendChild(div)
   })
 }
 
-function toast(msg){
-  const t=document.getElementById('toast');t.textContent=msg;t.className='toast show'
-  setTimeout(()=>t.className='toast hide',2500)
-}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show';setTimeout(()=>t.className='toast hide',2500)}
 </script>
 </body>
 </html>

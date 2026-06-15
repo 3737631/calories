@@ -85,6 +85,38 @@ nav button:active{color:#8e8e93}
 nav .nav-plus{width:54px;height:54px;border-radius:50%;background:#f4a621;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:-18px;box-shadow:0 6px 24px rgba(244,166,33,.35);transition:transform .15s}
 nav .nav-plus:active{transform:scale(.88)}
 nav .nav-plus svg{width:26px;height:26px;stroke:#fff;stroke-width:2.5;stroke-linecap:round}
+nav .nav-active{color:#e9c46a}
+/* MAIN VIEW / STATS TOGGLE */
+.main-view{display:block}
+.main-view.hide{display:none}
+.stats-view{display:none}
+.stats-view.show{display:block}
+/* STATS */
+.stats-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px 8px}
+.stats-header h2{font-size:17px;font-weight:700;color:#1c1c1e}
+.stats-header button{border:none;background:#f2f2f7;border-radius:12px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;color:#8e8e93}
+.stats-chart{display:flex;align-items:flex-end;gap:6px;padding:0 20px;height:200px;margin:12px 0}
+.stats-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end}
+.stats-bar{width:100%;border-radius:8px 8px 0 0;min-height:4px;transition:height .6s ease;position:relative}
+.stats-bar-label{font-size:10px;color:#aeaeb2;font-weight:500;margin-top:6px;text-align:center}
+.stats-bar-cals{font-size:10px;color:#8e8e93;font-weight:600;margin-bottom:4px;text-align:center}
+.stats-avg{text-align:center;padding:8px 20px;font-size:13px;color:#aeaeb2;font-weight:500;border-top:1px solid #f2f2f7;margin:0 20px}
+.stats-empty{padding:40px 20px;text-align:center;color:#aeaeb2}
+.stats-empty .icon{font-size:40px;margin-bottom:8px}
+.stats-empty .t{font-size:15px;font-weight:600;color:#8e8e93}
+/* ONBOARDING */
+.onboarding .modal{max-height:90dvh;overflow-y:auto}
+.onboarding .step{display:none}
+.onboarding .step.show{display:block}
+.onboarding select{width:100%;padding:14px 16px;border:1.5px solid #e5e5ea;border-radius:14px;font-size:15px;outline:none;font-family:inherit;margin-bottom:12px;background:#fff;color:#1c1c1e;-webkit-appearance:none;appearance:none}
+.onboarding .step-title{font-size:16px;font-weight:600;color:#1c1c1e;margin-bottom:4px}
+.onboarding .step-sub{font-size:13px;color:#aeaeb2;margin-bottom:20px}
+.onboarding .result-item{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #f2f2f7}
+.onboarding .result-item:last-child{border-bottom:none}
+.onboarding .result-label{font-size:14px;color:#8e8e93}
+.onboarding .result-val{font-size:14px;font-weight:700;color:#1c1c1e}
+.onboarding .summary-title{font-size:16px;font-weight:700;color:#1c1c1e;margin-bottom:4px}
+.onboarding .summary-sub{font-size:13px;color:#aeaeb2;margin-bottom:16px}
 /* CONFIG MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.2);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);z-index:100;display:none;align-items:flex-end;justify-content:center}
 .modal-overlay.show{display:flex}
@@ -115,6 +147,7 @@ nav .nav-plus svg{width:26px;height:26px;stroke:#fff;stroke-width:2.5;stroke-lin
   <button class="cfg-btn" onclick="toggleConfig()">⚙️</button>
 </header>
 
+<div class="main-view" id="mainView">
 <div class="date" id="dateDisplay"></div>
 
 <div class="ring-wrap">
@@ -175,7 +208,7 @@ nav .nav-plus svg{width:26px;height:26px;stroke:#fff;stroke-width:2.5;stroke-lin
 <div class="ocr-status" id="ocrStatus">Analizando imagen...</div>
 
 <div class="manual-search" id="manualSection">
-  <input type="text" id="manualSearch" placeholder="Buscar comida manualmente..." autocomplete="off">
+  <input type="text" id="manualSearch" placeholder="Buscar comida..." autocomplete="off">
 </div>
 <div class="manual-results" id="manualResults"></div>
 
@@ -183,14 +216,23 @@ nav .nav-plus svg{width:26px;height:26px;stroke:#fff;stroke-width:2.5;stroke-lin
   <div class="empty-state" id="emptyState">
     <div class="icon">🍽️</div>
     <div class="t">Sin comidas hoy</div>
-    <div class="s">Haz una foto a tu comida o busca manualmente</div>
+    <div class="s">Haz una foto a tu comida</div>
   </div>
+</div>
+</div>
+
+<div class="stats-view" id="statsView">
+  <div class="stats-header">
+    <h2>Estadísticas</h2>
+    <button onclick="toggleStats()">Cerrar</button>
+  </div>
+  <div id="statsContent"></div>
 </div>
 
 <nav>
-  <button><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></button>
+  <button onclick="toggleSearch()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button>
   <button class="nav-plus" onclick="document.getElementById('fileInput').click()"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
-  <button onclick="toggleConfig()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+  <button id="statsBtn" onclick="toggleStats()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></button>
 </nav>
 
 <div class="modal-overlay" id="configModal">
@@ -212,9 +254,68 @@ nav .nav-plus svg{width:26px;height:26px;stroke:#fff;stroke-width:2.5;stroke-lin
   </div>
 </div>
 
+<div class="modal-overlay onboarding" id="onboardingModal">
+  <div class="modal">
+    <div class="handle"></div>
+    <div class="step show" id="onStep1">
+      <div class="step-title">🙋 ¿Cómo te llamas?</div>
+      <div class="step-sub">Así personalizamos tu experiencia</div>
+      <input type="text" id="onName" placeholder="Tu nombre" style="width:100%;padding:14px 16px;border:1.5px solid #e5e5ea;border-radius:14px;font-size:15px;outline:none;font-family:inherit;margin-bottom:12px">
+      <div class="btn-group"><button class="btn-primary" onclick="onNext(1)">Continuar</button></div>
+    </div>
+    <div class="step" id="onStep2">
+      <div class="step-title">⚖️ Tu peso y altura</div>
+      <div class="step-sub">Para calcular tus necesidades</div>
+      <label class="s">Peso (kg)</label>
+      <input type="number" id="onWeight" placeholder="70" style="width:100%;padding:14px 16px;border:1.5px solid #e5e5ea;border-radius:14px;font-size:15px;outline:none;font-family:inherit;margin-bottom:12px">
+      <label class="s">Altura (cm)</label>
+      <input type="number" id="onHeight" placeholder="175" style="width:100%;padding:14px 16px;border:1.5px solid #e5e5ea;border-radius:14px;font-size:15px;outline:none;font-family:inherit;margin-bottom:12px">
+      <div class="btn-group"><button class="btn-primary" onclick="onNext(2)">Continuar</button></div>
+    </div>
+    <div class="step" id="onStep3">
+      <div class="step-title">🎂 Tu edad y género</div>
+      <div class="step-sub">Influye en tu metabolismo</div>
+      <label class="s">Edad (años)</label>
+      <input type="number" id="onAge" placeholder="30" style="width:100%;padding:14px 16px;border:1.5px solid #e5e5ea;border-radius:14px;font-size:15px;outline:none;font-family:inherit;margin-bottom:12px">
+      <label class="s">Género</label>
+      <select id="onGender"><option value="male">Hombre</option><option value="female">Mujer</option></select>
+      <div class="btn-group"><button class="btn-primary" onclick="onNext(3)">Continuar</button></div>
+    </div>
+    <div class="step" id="onStep4">
+      <div class="step-title">🏃 Actividad física</div>
+      <div class="step-sub">¿Cuánto te mueves al día?</div>
+      <select id="onActivity">
+        <option value="1.2">Sedentario (poco o nada de ejercicio)</option>
+        <option value="1.375">Ligero (1-3 días/semana)</option>
+        <option value="1.55" selected>Moderado (3-5 días/semana)</option>
+        <option value="1.725">Activo (6-7 días/semana)</option>
+        <option value="1.9">Muy activo (deporte diario intenso)</option>
+      </select>
+      <div class="btn-group"><button class="btn-primary" onclick="onNext(4)">Continuar</button></div>
+    </div>
+    <div class="step" id="onStep5">
+      <div class="step-title">🎯 Tu objetivo</div>
+      <div class="step-sub">¿Qué quieres conseguir?</div>
+      <select id="onGoal">
+        <option value="lose">Perder peso (déficit)</option>
+        <option value="maintain" selected>Mantener peso</option>
+        <option value="gain">Ganar masa muscular (superávit)</option>
+      </select>
+      <div class="btn-group"><button class="btn-primary" onclick="onNext(5)">Calcular</button></div>
+    </div>
+    <div class="step" id="onStep6">
+      <div class="step-title">✅ Tus objetivos diarios</div>
+      <div class="step-sub">Basados en tus datos</div>
+      <div id="onSummary"></div>
+      <div class="btn-group"><button class="btn-primary" onclick="finishOnboarding()">¡Empezar!</button></div>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <script>
 const STORAGE='nutritracker_data'
+const ONBOARD_KEY='nutritracker_onboarded'
 let pendingFile=null
 
 const FOOD_DB=[
@@ -336,6 +437,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     document.getElementById(id).addEventListener('change',()=>{saveGoals();updateRings()})
   })
   updateRings();renderMeals()
+  if(!localStorage.getItem(ONBOARD_KEY))document.getElementById('onboardingModal').classList.add('show')
 })
 
 function saveGoals(){
@@ -351,6 +453,105 @@ function saveGoals(){
 
 function toggleConfig(){
   document.getElementById('configModal').classList.toggle('show')
+}
+
+function toggleSearch(){
+  const el=document.getElementById('manualSection')
+  if(el.style.display==='block'){el.style.display='none';document.getElementById('manualResults').style.display='none'}
+  else{el.style.display='block';document.getElementById('manualSearch').focus()}
+}
+
+function toggleStats(){
+  const main=document.getElementById('mainView'),stats=document.getElementById('statsView')
+  const isShowing=stats.classList.contains('show')
+  main.classList.toggle('hide',!isShowing)
+  stats.classList.toggle('show',isShowing)
+  if(!isShowing)renderStats()
+}
+
+function renderStats(){
+  const el=document.getElementById('statsContent')
+  const days=[]
+  for(let i=6;i>=0;i--){
+    const d=new Date();d.setDate(d.getDate()-i)
+    const ds=d.toDateString()
+    const dayEntries=entries.filter(e=>new Date(e.date).toDateString()===ds)
+    const cal=dayEntries.reduce((s,e)=>s+(e.calories||0),0)
+    const label=d.toLocaleDateString('es',{weekday:'short'}).slice(0,3)
+    days.push({label,cal,date:d.getDate()})
+  }
+  const maxCal=Math.max(...days.map(d=>d.cal),1)
+  const avg=days.reduce((s,d)=>s+d.cal,0)/7
+
+  if(!days.some(d=>d.cal>0)){
+    el.innerHTML='<div class="stats-empty"><div class="icon">📊</div><div class="t">Aún no hay datos</div><div class="s">Registra comidas para ver tu progreso</div></div>'
+    return
+  }
+
+  el.innerHTML=`<div class="stats-chart">${days.map(d=>{
+    const h=Math.max(4,(d.cal/maxCal)*160)
+    const color=d.cal>0?'#e9c46a':'#f1f3f6'
+    return `<div class="stats-bar-wrap"><div class="stats-bar-cals">${d.cal>0?d.cal.toFixed(0):''}</div><div class="stats-bar" style="height:${h}px;background:${color}"></div><div class="stats-bar-label">${d.label} ${d.date}</div></div>`
+  }).join('')}</div><div class="stats-avg">Media 7 días: <strong>${avg.toFixed(0)} kcal</strong></div>`
+}
+
+// ONBOARDING
+let onData={}
+function onNext(step){
+  if(step===1&&!document.getElementById('onName').value.trim()){toast('Escribe tu nombre');return}
+  if(step===2){const w=parseFloat(document.getElementById('onWeight').value),h=parseFloat(document.getElementById('onHeight').value);if(!w||!h){toast('Completa peso y altura');return};onData.weight=w;onData.height=h}
+  if(step===3){const a=parseInt(document.getElementById('onAge').value);if(!a||a<10||a>120){toast('Edad válida (10-120)');return};onData.age=a;onData.gender=document.getElementById('onGender').value}
+  if(step===4){onData.activity=parseFloat(document.getElementById('onActivity').value)}
+  if(step===5){onData.goal=document.getElementById('onGoal').value;calculateGoals()}
+  if(step<6){
+    document.getElementById('onStep'+step).classList.remove('show')
+    document.getElementById('onStep'+(step+1)).classList.add('show')
+  }
+}
+
+function calculateGoals(){
+  const w=onData.weight,h=onData.height,a=onData.age,g=onData.gender,act=onData.activity
+  let bmr=g==='male'?10*w+6.25*h-5*a+5:10*w+6.25*h-5*a-161
+  let tdee=bmr*act
+  if(onData.goal==='lose')tdee-=300
+  else if(onData.goal==='gain')tdee+=300
+
+  const protein=Math.round(w*1.8)
+  const fat=Math.round(tdee*0.25/9)
+  const carbs=Math.round((tdee-protein*4-fat*9)/4)
+
+  onData.calories=Math.round(tdee)
+  onData.protein=protein
+  onData.fat=fat
+  onData.carbs=carbs
+
+  const goalMap={lose:'Perder peso',maintain:'Mantener peso',gain:'Ganar masa muscular'}
+  const actMap={1.2:'Sedentario',1.375:'Ligero',1.55:'Moderado',1.725:'Activo',1.9:'Muy activo'}
+
+  document.getElementById('onSummary').innerHTML=`
+    <div class="summary-title">${onData.name||'Usuario'}</div>
+    <div class="summary-sub">${onData.weight}kg · ${onData.height}cm · ${onData.age}años · ${goalMap[onData.goal]}</div>
+    <div class="result-item"><span class="result-label">Calorías</span><span class="result-val">${Math.round(tdee)} kcal</span></div>
+    <div class="result-item"><span class="result-label">Proteína</span><span class="result-val">${protein} g</span></div>
+    <div class="result-item"><span class="result-label">Grasa</span><span class="result-val">${fat} g</span></div>
+    <div class="result-item"><span class="result-label">Carbohidratos</span><span class="result-val">${carbs} g</span></div>
+  `
+}
+
+function finishOnboarding(){
+  goalCal=onData.calories;goalProtein=onData.protein;goalFat=onData.fat;goalCarbs=onData.carbs
+  document.getElementById('goalCal').value=goalCal
+  document.getElementById('goalProtein').value=goalProtein
+  document.getElementById('goalFat').value=goalFat
+  document.getElementById('goalCarbs').value=goalCarbs
+  localStorage.setItem('goalCal',goalCal)
+  localStorage.setItem('goalProtein',goalProtein)
+  localStorage.setItem('goalFat',goalFat)
+  localStorage.setItem('goalCarbs',goalCarbs)
+  localStorage.setItem(ONBOARD_KEY,'1')
+  document.getElementById('onboardingModal').classList.remove('show')
+  updateRings()
+  toast('✅ Objetivos calculados para ti')
 }
 
 async function handleFile(e){

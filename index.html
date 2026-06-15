@@ -34,24 +34,19 @@ body{font-family:Inter,-apple-system,sans-serif;background:#fff;color:#1c1c1e;-w
 .macro-val .num{font-size:18px;font-weight:700;color:#1c1c1e;line-height:1}
 .macro-val .unit{font-size:9px;color:#aeaeb2;font-weight:600;margin-top:1px}
 .macro-label{font-size:12px;color:#8e8e93;font-weight:500}
-/* AI CARD */
-.ai-card{margin:12px 20px 8px;display:block}
-.ai-card-inner{background:#efcb72;border-radius:16px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:transform .15s;box-shadow:0 4px 16px rgba(239,203,114,.25)}
-.ai-card-inner:active{transform:scale(.97)}
-.ai-left{display:flex;align-items:center;gap:12px}
-.ai-icon{width:36px;height:36px;background:rgba(255,255,255,.3);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px}
-.ai-text{font-size:15px;font-weight:600;color:#4a3f1a}
-.ai-arrow{font-size:22px;color:#8a7530;font-weight:300}
-.ai-card input{display:none}
-/* ANALYZING */
-.analyzing{display:none;margin:8px 20px;background:#f8f9fc;border-radius:14px;padding:16px;text-align:center}
-.analyzing.show{display:block}
-.spinner{width:28px;height:28px;border:3px solid #e8e8ed;border-top-color:#e9c46a;border-radius:50%;margin:0 auto 8px;animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.analyzing-text{font-size:13px;color:#8e8e93;font-weight:500}
+/* CAMERA CARD */
+.cam-card{margin:12px 20px 8px;display:block}
+.cam-card-inner{background:#f8f9fc;border:2px dashed #e5e5ea;border-radius:16px;padding:20px 18px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-direction:column;gap:6px}
+.cam-card-inner:active{transform:scale(.97);background:#f2f2f7}
+.cam-icon{width:44px;height:44px;background:#e9c46a20;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px}
+.cam-text{font-size:15px;font-weight:600;color:#8e8e93}
+.cam-sub{font-size:12px;color:#aeaeb2;font-weight:500}
+.cam-card input{display:none}
+/* OCR STATUS */
+.ocr-status{display:none;margin:8px 20px;text-align:center;font-size:13px;color:#aeaeb2;font-weight:500}
+.ocr-status.show{display:block}
 /* MANUAL SEARCH */
 .manual-search{margin:8px 20px;display:none}
-.manual-search.show{display:block}
 .manual-search input{width:100%;padding:14px 16px;border:1.5px solid #e5e5ea;border-radius:14px;font-size:15px;outline:none;font-family:inherit;transition:border-color .2s;background:#f8f9fc}
 .manual-search input:focus{border-color:#e9c46a;background:#fff}
 .manual-results{margin:4px 20px;display:none;background:#fff;border:1px solid #f2f2f7;border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.05);max-height:280px;overflow-y:auto}
@@ -60,12 +55,6 @@ body{font-family:Inter,-apple-system,sans-serif;background:#fff;color:#1c1c1e;-w
 .manual-item:active{background:#f8f9fc}
 .manual-name{font-size:14px;font-weight:600;color:#1c1c1e}
 .manual-cals{font-size:12px;color:#aeaeb2;font-weight:500;margin-top:2px}
-/* GOALS */
-.goals{display:flex;gap:6px;margin:4px 20px 4px;overflow-x:auto;padding:2px 0}
-.goal-item{display:flex;align-items:center;gap:6px;background:#f8f9fc;border-radius:12px;padding:8px 12px;flex-shrink:0}
-.goal-item label{font-size:11px;color:#aeaeb2;font-weight:600;text-transform:uppercase;letter-spacing:.3px}
-.goal-item input{width:44px;background:transparent;border:none;font-size:13px;font-weight:700;color:#1c1c1e;text-align:center;outline:none;font-family:inherit;-moz-appearance:textfield}
-.goal-item input::-webkit-outer-spin-button,.goal-item input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 /* MEALS */
 .meals{padding:4px 20px}
 .meal{background:#fff;border-radius:18px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:8px;box-shadow:0 4px 20px rgba(0,0,0,.05);border:1px solid #f2f2f7}
@@ -105,14 +94,12 @@ nav .nav-plus svg{width:26px;height:26px;stroke:#fff;stroke-width:2.5;stroke-lin
 .modal h3{font-size:20px;font-weight:700;color:#1c1c1e}
 .modal p{font-size:14px;color:#aeaeb2;margin:4px 0 20px}
 .modal label.s{font-size:12px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:block}
-.modal input[type=password]{width:100%;padding:14px 16px;border:1.5px solid #e5e5ea;border-radius:14px;font-size:15px;outline:none;font-family:inherit;transition:border-color .2s}
-.modal input[type=password]:focus{border-color:#e9c46a}
+.modal input[type=number]{width:100%;padding:14px 16px;border:1.5px solid #e5e5ea;border-radius:14px;font-size:15px;outline:none;font-family:inherit;margin-bottom:12px}
+.modal input[type=number]:focus{border-color:#e9c46a}
 .modal .btn-group{display:flex;gap:8px;margin-top:12px}
-.modal .btn-group button{flex:1;padding:14px;border:none;border-radius:14px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:transform .15s}
+.modal .btn-group button{width:100%;padding:14px;border:none;border-radius:14px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:transform .15s}
 .modal .btn-group button:active{transform:scale(.96)}
 .modal .btn-primary{background:#1c1c1e;color:#fff}
-.modal .btn-secondary{background:#f2f2f7;color:#8e8e93}
-.modal a{display:block;text-align:center;font-size:13px;color:#e9c46a;font-weight:600;margin-top:14px;text-decoration:none}
 /* TOAST */
 .toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:200;background:#1c1c1e;color:#fff;padding:10px 22px;border-radius:14px;font-size:14px;font-weight:500;transition:all .3s;pointer-events:none;white-space:nowrap}
 .toast.hide{opacity:0;transform:translateX(-50%) translateY(-12px)}
@@ -176,39 +163,27 @@ nav .nav-plus svg{width:26px;height:26px;stroke:#fff;stroke-width:2.5;stroke-lin
   </div>
 </div>
 
-<label class="ai-card">
-  <div class="ai-card-inner" onclick="document.getElementById('fileInput').click()">
-    <div class="ai-left">
-      <div class="ai-icon">🧠</div>
-      <span class="ai-text">Perspectivas de IA</span>
-    </div>
-    <span class="ai-arrow">›</span>
+<label class="cam-card">
+  <div class="cam-card-inner" onclick="document.getElementById('fileInput').click()">
+    <div class="cam-icon">📷</div>
+    <span class="cam-text">Hacer foto a la comida</span>
+    <span class="cam-sub">o subir desde la galería</span>
   </div>
   <input type="file" id="fileInput" accept="image/*" capture="environment">
 </label>
 
-<div class="analyzing" id="analyzing">
-  <div class="spinner"></div>
-  <div class="analyzing-text">Analizando con Gemini AI...</div>
-</div>
+<div class="ocr-status" id="ocrStatus">Analizando imagen...</div>
 
 <div class="manual-search" id="manualSection">
   <input type="text" id="manualSearch" placeholder="Buscar comida manualmente..." autocomplete="off">
 </div>
 <div class="manual-results" id="manualResults"></div>
 
-<div class="goals" id="goalsContainer">
-  <div class="goal-item"><label>kcal</label><input type="number" id="goalCal" value="2800"></div>
-  <div class="goal-item"><label>prote</label><input type="number" id="goalProtein" value="150"></div>
-  <div class="goal-item"><label>grasa</label><input type="number" id="goalFat" value="84"></div>
-  <div class="goal-item"><label>carbs</label><input type="number" id="goalCarbs" value="350"></div>
-</div>
-
 <div class="meals" id="mealsList">
   <div class="empty-state" id="emptyState">
     <div class="icon">🍽️</div>
     <div class="t">Sin comidas hoy</div>
-    <div class="s">Toca "Perspectivas de IA" para analizar</div>
+    <div class="s">Haz una foto a tu comida o busca manualmente</div>
   </div>
 </div>
 
@@ -221,23 +196,26 @@ nav .nav-plus svg{width:26px;height:26px;stroke:#fff;stroke-width:2.5;stroke-lin
 <div class="modal-overlay" id="configModal">
   <div class="modal">
     <div class="handle"></div>
-    <h3>Configuración</h3>
-    <p style="color:#22c55e;font-weight:600">✅ API key preconfigurada</p>
-    <p style="margin-top:2px">No necesitas hacer nada, la app ya funciona.</p>
-    <label class="s">Gemini API Key (solo si quieres cambiarla)</label>
-    <input type="password" id="apiKeyInput" placeholder="Dejar vacío para usar la preconfigurada">
+    <h3>Objetivos diarios</h3>
+    <p>Ajusta tus metas de nutrición</p>
+    <label class="s">Calorías</label>
+    <input type="number" id="goalCal" value="2800" style="width:100%;padding:14px 16px;border:1.5px solid #e5e5ea;border-radius:14px;font-size:15px;outline:none;font-family:inherit;margin-bottom:12px">
+    <label class="s">Proteína (g)</label>
+    <input type="number" id="goalProtein" value="150" style="width:100%;padding:14px 16px;border:1.5px solid #e5e5ea;border-radius:14px;font-size:15px;outline:none;font-family:inherit;margin-bottom:12px">
+    <label class="s">Grasa (g)</label>
+    <input type="number" id="goalFat" value="84" style="width:100%;padding:14px 16px;border:1.5px solid #e5e5ea;border-radius:14px;font-size:15px;outline:none;font-family:inherit;margin-bottom:12px">
+    <label class="s">Carbohidratos (g)</label>
+    <input type="number" id="goalCarbs" value="350" style="width:100%;padding:14px 16px;border:1.5px solid #e5e5ea;border-radius:14px;font-size:15px;outline:none;font-family:inherit;margin-bottom:20px">
     <div class="btn-group">
-      <button class="btn-primary" onclick="saveKey()">Guardar</button>
-      <button class="btn-secondary" onclick="testKey()">Probar</button>
+      <button class="btn-primary" onclick="saveGoals();toggleConfig();toast('✅ Objetivos guardados')">Guardar</button>
     </div>
-    <a href="https://aistudio.google.com/" target="_blank" rel="noopener">Obtener API key →</a>
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <script>
-const MODEL='gemini-2.0-flash'
 const STORAGE='nutritracker_data'
-const GOALS_KEY='nutritracker_goals'
+let pendingFile=null
 
 const FOOD_DB=[
   {n:'Pollo a la plancha',c:165,p:31,f:3.6,car:0},
@@ -344,16 +322,13 @@ let goalCal=parseInt(localStorage.getItem('goalCal'))||2800
 let goalProtein=parseInt(localStorage.getItem('goalProtein'))||150
 let goalFat=parseInt(localStorage.getItem('goalFat'))||84
 let goalCarbs=parseInt(localStorage.getItem('goalCarbs'))||350
-let apiKey=localStorage.getItem('geminiApiKey')||atob('QVEuQWI4Uk42SnBjUnlTdlM0T3hMWG9CUWljVjFUcUh2YnlCSTFfNWZzenFPYk1xcnJJX1E=')
 
-// Init
 document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('dateDisplay').textContent=new Date().toLocaleDateString('es',{month:'short',day:'numeric'})
   document.getElementById('goalCal').value=goalCal
   document.getElementById('goalProtein').value=goalProtein
   document.getElementById('goalFat').value=goalFat
   document.getElementById('goalCarbs').value=goalCarbs
-  if(apiKey)document.getElementById('apiKeyInput').value=apiKey
   document.getElementById('fileInput').addEventListener('change',handleFile)
   document.getElementById('manualSearch').addEventListener('input',searchFoodDB)
   document.getElementById('manualResults').addEventListener('click',selectManualFood)
@@ -378,87 +353,52 @@ function toggleConfig(){
   document.getElementById('configModal').classList.toggle('show')
 }
 
-function saveKey(){
-  const v=document.getElementById('apiKeyInput').value.trim()
-  if(v){apiKey=v;localStorage.setItem('geminiApiKey',v);toast('✅ API key actualizada')}
-  else {apiKey=atob('QVEuQWI4Uk42SnBjUnlTdlM0T3hMWG9CUWljVjFUcUh2YnlCSTFfNWZzenFPYk1xcnJJX1E=');localStorage.removeItem('geminiApiKey');toast('✅ Usando API key preconfigurada')}
-  toggleConfig()
-}
-
-async function testKey(){
-  const v=document.getElementById('apiKeyInput').value.trim()
-  if(!v){toast('Ingresa una API key');return}
-  try{
-    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${v}`,{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({contents:[{parts:[{text:'ok'}]}]})
-    })
-    toast(r.ok?'✅ Conexión exitosa':'❌ Clave inválida')
-  }catch(e){toast('❌ Error de conexión')}
-}
-
 async function handleFile(e){
   const file=e.target.files[0];if(!file)return
-  if(!apiKey){toast('Error: API key no configurada');return}
-  document.getElementById('analyzing').classList.add('show')
+  pendingFile=file
+  document.getElementById('ocrStatus').textContent='Analizando imagen...'
+  document.getElementById('ocrStatus').classList.add('show')
   try{
-    const base64=await toBase64(file)
-    const resp=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${apiKey}`,{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        contents:[{role:'user',parts:[
-          {text:'Eres nutricionista. Responde SOLO JSON:\n{"name":"Nombre del plato en español","calories":0,"protein":0,"fat":0,"carbs":0}'},
-          {inlineData:{mimeType:file.type,data:base64}}
-        ]}],
-        generationConfig:{temperature:.1,maxOutputTokens:1024}
-      })
-    })
-    if(!resp.ok){
-      if(resp.status===429){
-        toast('⏳ API ocupada, probando de nuevo...')
-        await new Promise(r=>setTimeout(r,2000))
-        const retry=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${apiKey}`,{
-          method:'POST',headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({
-            contents:[{role:'user',parts:[
-              {text:'Eres nutricionista. Responde SOLO JSON:\n{"name":"Nombre del plato en español","calories":0,"protein":0,"fat":0,"carbs":0}'},
-              {inlineData:{mimeType:file.type,data:base64}}
-            ]}],
-            generationConfig:{temperature:.1,maxOutputTokens:1024}
-          })
-        })
-        if(!retry.ok)throw new Error('429')
-        const d2=await retry.json(),txt2=d2.candidates?.[0]?.content?.parts?.[0]?.text||'',m2=txt2.match(/\{[\s\S]*\}/)
-        if(!m2)throw new Error('429')
-        const r2=JSON.parse(m2[0]);addEntry(r2,file);document.getElementById('analyzing').classList.remove('show');e.target.value='';return
+    const {data:{text}}=await Tesseract.recognize(file,'spa')
+    document.getElementById('ocrStatus').classList.remove('show')
+    const words=text.toLowerCase().replace(/[^a-záéíóúñü\s]/g,'').trim().split(/\s+/).filter(w=>w.length>2)
+    const matches=FOOD_DB.map(f=>{
+      const score=words.reduce((s,w)=>s+(f.n.toLowerCase().includes(w)?1:0),0)
+      return{...f,score}
+    }).filter(f=>f.score>0).sort((a,b)=>b.score-a.score).slice(0,6)
+    if(matches.length){
+      document.getElementById('manualSearch').value=matches[0].n
+      searchFoodDB()
+      if(document.getElementById('manualResults').querySelectorAll('.manual-item').length===1){
+        addEntry({name:matches[0].n,calories:matches[0].c,protein:matches[0].p,fat:matches[0].f,carbs:matches[0].car})
+        e.target.value=''
+        return
       }
-      throw new Error('Error '+resp.status)
     }
-    const d=await resp.json(),txt=d.candidates?.[0]?.content?.parts?.[0]?.text||'',m=txt.match(/\{[\s\S]*\}/)
-    if(!m)throw new Error('No se pudo analizar')
-    addEntry(JSON.parse(m[0]),file)
-  }catch(e){
-    document.getElementById('analyzing').classList.remove('show')
-    if(e.message==='429'){
-      toast('🔁 API sin conexión. Usa búsqueda manual ↓')
-      document.getElementById('manualSection').style.display='block'
-      document.getElementById('manualSearch').focus()
-    }else{toast('❌ '+e.message)}
+    document.getElementById('manualSection').style.display='block'
+    document.getElementById('manualSearch').focus()
+    if(matches.length)document.getElementById('manualSearch').value=''
+    searchFoodDB()
+  }catch(err){
+    document.getElementById('ocrStatus').classList.remove('show')
+    document.getElementById('manualSection').style.display='block'
+    document.getElementById('manualSearch').focus()
   }
   e.target.value=''
 }
 
-function addEntry(result,file){
-  const entry={...result,date:new Date().toISOString(),id:Date.now(),thumbnail:file?URL.createObjectURL(file):''}
+function addEntry(result){
+  const entry={...result,date:new Date().toISOString(),id:Date.now(),thumbnail:pendingFile?URL.createObjectURL(pendingFile):''}
+  pendingFile=null
   entries.unshift(entry);if(entries.length>100)entries.pop()
   localStorage.setItem(STORAGE,JSON.stringify(entries))
   updateRings();renderMeals()
-  toast('✅ '+(result.name||'Analizado'))
-  document.getElementById('analyzing').classList.remove('show')
+  toast('✅ '+(result.name||'Añadido'))
   document.getElementById('manualSection').style.display='none'
+  document.getElementById('manualSearch').value=''
+  document.getElementById('manualResults').innerHTML=''
+  document.getElementById('manualResults').style.display='none'
 }
-
-function toBase64(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(f)})}
 
 function searchFoodDB(){
   const q=document.getElementById('manualSearch').value.toLowerCase().trim()
@@ -476,9 +416,6 @@ function searchFoodDB(){
 function selectManualFood(e){
   const item=e.target.closest('.manual-item');if(!item||!item.dataset.name)return
   addEntry({name:item.dataset.name,calories:parseFloat(item.dataset.cal),protein:parseFloat(item.dataset.protein),fat:parseFloat(item.dataset.fat),carbs:parseFloat(item.dataset.carbs)})
-  document.getElementById('manualSearch').value=''
-  document.getElementById('manualResults').innerHTML=''
-  document.getElementById('manualResults').style.display='none'
 }
 
 function updateRings(){
@@ -511,7 +448,7 @@ function renderMeals(){
   const el=document.getElementById('mealsList')
 
   if(!todayEntries.length){
-    el.innerHTML='<div class="empty-state" id="emptyState"><div class="icon">🍽️</div><div class="t">Sin comidas hoy</div><div class="s">Toca "Perspectivas de IA" o busca manualmente</div></div>'
+    el.innerHTML='<div class="empty-state" id="emptyState"><div class="icon">🍽️</div><div class="t">Sin comidas hoy</div><div class="s">Haz una foto a tu comida</div></div>'
     return
   }
 

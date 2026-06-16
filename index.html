@@ -377,14 +377,15 @@ async function handleFile(e){
   try{
     const fd=new FormData()
     fd.append('file',file)
-    fd.append('options',JSON.stringify({maxTags:10,language:'es'}))
+    fd.append('options',JSON.stringify({maxTags:10}))
     const r=await fetch('https://aiautotagging.com/api/tag/image',{method:'POST',body:fd})
     const d=await r.json()
-    if(!d.tags||!d.tags.length)throw new Error('No tags')
-    const food=matchTagsToFood(d.tags)
+    const tags=extractTags(d)
+    if(!tags||!tags.length)throw new Error('No tags')
+    const food=matchTagsToFood(tags)
     if(food){
       detectedFood=food
-      showConfirmation(food,d.tags)
+      showConfirmation(food,tags)
     }else{
       throw new Error('No match')
     }
@@ -394,6 +395,24 @@ async function handleFile(e){
   }
   document.getElementById('analyzing').classList.remove('show')
   e.target.value=''
+}
+
+function extractTags(d){
+  if(d.tags&&d.tags.length>0&&d.tags[0].label&&!d.tags[0].label.startsWith('tags ')){
+    return d.tags
+  }
+  const raw=d.raw||''
+  const labels=[...raw.matchAll(/"label"\s*:\s*"([^"]+)"/g)].map(m=>m[1])
+  const confs=[...raw.matchAll(/"confidence"\s*:\s*([0-9.]+)/g)].map(m=>parseFloat(m[1]))
+  const seen=new Set()
+  const result=[]
+  for(let i=0;i<labels.length;i++){
+    const l=labels[i].toLowerCase()
+    if(l==='reason'||seen.has(l))continue
+    seen.add(l)
+    if(confs[i]!==undefined){result.push({label:l,confidence:confs[i]})}
+  }
+  return result
 }
 
 function matchTagsToFood(tags){
